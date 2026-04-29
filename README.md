@@ -28,32 +28,81 @@ Alpheus is a full-stack Web3 application that allows users to deploy custom ERC-
 ### Prerequisites
 - Node.js (v18+ recommended)
 - MongoDB running locally (default: `mongodb://localhost:27017/alpheus`)
-- MetaMask wallet with Sepolia ETH
 
-### 1. Smart Contracts
+---
+
+### 📝 Detailed Smart Contract Deployment Guide
+
+Follow these steps to get the Token Factory live on the Sepolia Testnet.
+
+#### Step 1: Set Up Your Wallet
+1.  **Install MetaMask:** Download the [MetaMask extension](https://metamask.io/) for your browser.
+2.  **Create an Account:** Follow the prompts to create a new wallet. **Crucial:** Save your Secret Recovery Phrase in a safe, offline place.
+3.  **Switch to Sepolia:** 
+    *   Open MetaMask.
+    *   Click the network selector (top left).
+    *   Toggle "Show test networks" and select **Sepolia**.
+
+#### Step 2: Get Sepolia ETH (Gas Money)
+You need test ETH to pay for the deployment. Get it for free here:
+*   [Google Cloud Faucet](https://cloud.google.com/application/redesign/faucets/ethereum/sepolia)
+*   [Alchemy Faucet](https://sepoliafaucet.com/)
+*   [Infura Faucet](https://www.infura.io/faucet/sepolia)
+
+#### Step 3: Get an RPC URL
+1.  Go to [Infura](https://infura.io/) or [Alchemy](https://alchemy.com/) and create a free account.
+2.  Create a "New Project" or "App."
+3.  Select **Sepolia** as the network.
+4.  Copy your **HTTPS RPC URL**.
+
+#### Step 4: Configure the Environment
+1.  Navigate to the `contracts/` directory.
+2.  Create a file named `.env` (or copy `.env.example`).
+3.  Add your credentials:
+    ```env
+    SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_API_KEY
+    PRIVATE_KEY=your_metamask_private_key
+    ```
+    *   *To find your Private Key:* Open MetaMask -> Account Details -> Export Private Key. **Never share this with anyone!**
+
+#### Step 5: Deploy to Sepolia
+Run the following commands in your terminal:
 ```bash
 cd contracts
 npm install
-# Configure .env with SEPOLIA_RPC_URL and PRIVATE_KEY
 npx hardhat compile
 npx hardhat run scripts/deploy.js --network sepolia
 ```
+4.  **Copy the Address:** After the script finishes, it will print: `TokenFactory deployed to: 0x...`. Copy this address.
 
-### 2. Backend
+#### Step 6: Connect the Frontend
+1.  Open `frontend/src/utils/contracts.js`.
+2.  Replace the `FACTORY_ADDRESS` value with the address you just copied:
+    ```javascript
+    export const FACTORY_ADDRESS = '0xYourDeployedAddressHere';
+    ```
+
+---
+
+### 🖥️ Running the Application
+
+#### 1. Backend
 ```bash
 cd backend
 npm install
-# Ensure .env is configured with MONGO_URI
 node server.js
 ```
+*(Ensure MongoDB is running locally on port 27017)*
 
-### 3. Frontend
+#### 2. Frontend
 ```bash
 cd frontend
 npm install
-# Update FACTORY_ADDRESS in src/utils/contracts.js
 npm run dev
 ```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
 
 ## 📖 How to Use
 
